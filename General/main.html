@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="text" v-on:input="changeTitle">
+    <h1>{{ title1 }}</h1>
+    <p v-once>{{ title2 }} <a v-bind:href="link">Google proszę państwa</a></p>
+    <p>{{ title2 }}</p>
+    <p>{{ returnWithA() }}</p>
+    <p> {{ title2 }}</p>
+    <p v-on:mousemove="updateCoordinates">Coordinates: {{ x }}/{{ y }}
+    <span  v-on:mousemove.stop="">DEAD SPOT</span></p>
+    <input type="text" v-on:keyup.enter="alertMe">
+    <button v-on:click="counter++">Increment</button>
+    <p>{{ counter }}</p>
+    <p>{{ counter > 10 ? 'Greater than 10' : 'Smaller than 10'   }}</p>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            title1: 'Hello World!',
+            title2: 'siema, ściema',
+            link: 'http://google.pl',
+            x: 0,
+            y:0,
+            counter: 0
+        },
+        watch: {
+            counter : function() {
+                var vm = this;
+                setTimeout(function() {
+                    vm.counter = 0;
+                },2000)
+            }
+        },
+        methods: {
+            changeTitle: function(event) {
+                this.title1 =  event.target.value;
+            },
+            returnWithA: function() {
+                this.title2 = 'Ale ściema!';
+                return this.title2;
+
+            },
+            updateCoordinates: function (event) {
+                this.x = event.clientX;
+                this.y = event.clientY;
+            },
+            alertMe: function(){
+                alert('Alert!')
+            }
+        }
+    })
+</script>
+</html>
