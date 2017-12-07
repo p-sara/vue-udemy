@@ -6,21 +6,26 @@
     <button @click="showP = !showP">Toggle</button>
     <p v-if="showP">You either see me ...</p>
     <p v-else>...or me</p>
-    <p v-show="hideP">You either see me ...</p>
-    <p>...or me</p>
+    <p v-show="showP">You either see me ...</p>
+    <p v-show="!showP">...or me</p>
   </div>
   <!-- 2) Output an <ul> of array elements of your choice. Also print the index of each element. -->
   <ul>
-    <li></li>
+    <li v-for="(el, index) in saraFriends">{{ el }}({{ index }})</li>
   </ul>
   <!-- 3) Print all key-value pairs of the following object: {title: 'Lord of the Rings', author: 'J.R.R. Tolkiens', books: '3'}. Also print the index of each item. -->
   <ul>
-    <li></li>
+    <li v-for="(value, key, index) in order">{{ key }}: {{ value }} ({{index}})</li>
   </ul>
   <!-- 4) Print the following object (only the values) and also create a nested loop for the array: {name: 'TESTOBJECT', data: [1.67, 1.33, 0.98, 2.21]} (hint: use v-for and v-if to achieve this) -->
   <ul>
-    <li>
-    
+    <li v-for="el in array">
+        {{ el }}
+        <ul v-if="el instanceof Array">
+          <li v-for="e in el">
+              {{ e }}
+            </li>
+        </ul>
     </li>
   </ul>
 </div>
@@ -29,11 +34,15 @@
       el: '#exercise',
       data: {
           showP: true,
-          hideP: true,
+          saraFriends: ['mama', 'tata', 'brat', 'kot', 'chlopak', 'psiapsiolka'],
           order: {title: 'Lord of the Rings', author: 'J.R.R. Tolkiens', books: '3'},
           array: {name: 'TESTOBJECT', data: [1.67, 1.33, 0.98, 2.21]}
       },
       methods: {
+          check: function() {
+              let arr = [1,2,3,4,5];
+              console.log(typeof arr)
+          }
 
       }
   })
