@@ -53,15 +53,15 @@
             </div>
         </div>
     <div class="row">
-        <ul style="list-style-type: none;"
-            v-for="player in hitPoints">
-            <li style="background-color: darkred; color: white;">
-                {{ player }}
-            </li>
-            <li style="background-color: greenyellow;">
-                {{ player }}
-            </li>
-        </ul>
+        <div class="box">
+            <ul style="list-style-type: none; display:inline-block;"
+                v-for="(player, key) in hitPoints">
+                <li v-for="value in player"
+                    :class="{monster: key==='monster', me: key==='me'}">
+                    {{ key }}: <span style="font-weight: bold; font-size: 18px;">{{ value }}</span>
+                </li>
+            </ul>
+        </div>
     </div>
     </div>
 </div>
@@ -83,8 +83,8 @@
         },
         methods: {
             attackMonster: function() {
-                this.hitPoints.me.push(parseInt(Math.random()*10) + parseInt(Math.random()*10));
-                this.hitPoints.monster.push(parseInt(Math.random()*10) + parseInt(Math.random()*10));
+                this.hitPoints.me.unshift(parseInt(Math.random()*10) + parseInt(Math.random()*10));
+                this.hitPoints.monster.unshift(parseInt(Math.random()*10) + parseInt(Math.random()*10));
             },
             specialAttackMonster: function() {
                 console.log('special attack');
@@ -107,6 +107,11 @@
     .row {
         text-align:center;
     }
+    .box {
+        width:300px;
+        margin: 0 auto;
+        margin-top:30px;
+    }
     .power-bar {
         height: 50px;
         width:200px;
@@ -118,5 +123,12 @@
         height: 50px;
         width:98%;
         background-color: hotpink;
+    }
+    .monster {
+        background-color: darkred;
+        color: white
+    }
+    .me {
+        background-color: yellowgreen;
     }
 </style>
