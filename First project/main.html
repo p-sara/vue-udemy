@@ -13,16 +13,16 @@
             <div class="col-6">
                 <h2>YOU</h2>
                 <div class="power-bar">
-                    <div class="power-content">
-                        <span>98</span>
+                    <div class="power-content" :style="{width: outputMe + '%'}">
+                        <span>{{outputMe}}</span>
                     </div>
                 </div>
             </div>
             <div class="col-6">
                 <h2>MONSTER</h2>
                 <div class="power-bar">
-                    <div class="power-content">
-                        <span>98</span>
+                    <div class="power-content" :style="{width: outputMonster + '%'}">
+                        <span>{{outputMonster}}</span>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="mx-auto"
                  v-if="showBtn">
                 <button class="btn btn-dark"
-                        @click="showBtn = !showBtn">
+                        @click="startNewGame()">
                         START NEW GAME</button>
             </div>
             <div class="mx-auto"
@@ -48,7 +48,7 @@
                         @click="heal()">
                         HEAL</button>
                 <button class="btn btn-primary"
-                        @click="showBtn = !showBtn">
+                        @click="giveUp()">
                         GIVE UP</button>
             </div>
         </div>
@@ -72,28 +72,50 @@
         el: '#app',
         data: {
             showBtn: true,
+            currentAttackMe: 0,
+            currentAttackMonster: 0,
             hitPoints: {
                 me: [],
                 monster: []
             },
-            outputPlayer: 100,
-            outputMonster:100
+            outputMe: 100,
+            outputMonster:100,
+            healMe: 0,
+            healMonster: 0
         },
         watch: {
         },
         methods: {
             attackMonster: function() {
-                this.hitPoints.me.unshift(parseInt(Math.random()*10) + parseInt(Math.random()*10));
-                this.hitPoints.monster.unshift(parseInt(Math.random()*10) + parseInt(Math.random()*10));
+              this.currentAttackMe = parseInt(Math.random()*10) + parseInt(Math.random()*10);
+              this.currentAttackMonster = parseInt(Math.random()*10) + parseInt(Math.random()*10);
+              this.hitPoints.me.unshift(this.currentAttackMe);
+              this.hitPoints.monster.unshift(this.currentAttackMonster);
+              this.outputMe = this.outputMe - this.currentAttackMonster;
+              this.outputMonster = this.outputMonster - this.currentAttackMe;
             },
             specialAttackMonster: function() {
-                console.log('special attack');
+              this.currentAttackMe = parseInt(Math.random()*10) + parseInt(Math.random()*10);
+              this.currentAttackMonster = parseInt(Math.random()*10) + parseInt(Math.random()*10);
+              this.hitPoints.me.unshift(this.currentAttackMe + 10);
+              this.hitPoints.monster.unshift(this.currentAttackMonster + 10);
+              this.outputMe = this.outputMe - this.currentAttackMonster;
+              this.outputMonster = this.outputMonster - this.currentAttackMe;
             },
             heal: function() {
-                console.log('heal');
+              this.healMe = parseInt(Math.random()*10) + parseInt(Math.random()*10);
+              this.healMonster = parseInt(Math.random()*10) + parseInt(Math.random()*10);
+              this.outputMe = this.outputMe + this.healMe;
+              this.outputMonster = this.outputMonster + this.healMonster;
             },
             giveUp: function() {
-                console.log('give up');
+              this.showBtn = !this.showBtn
+              this.outputMe = 0;
+            },
+            startNewGame() {
+              this.showBtn = !this.showBtn;
+              this.outputMe = 100;
+              this.outputMonster = 100;
             }
         }
     })
@@ -112,6 +134,10 @@
         margin: 0 auto;
         margin-top:30px;
     }
+    .box li:first-child {
+      border: 2px black solid;
+      padding:5px 10px;
+    }
     .power-bar {
         height: 50px;
         width:200px;
@@ -121,7 +147,7 @@
     }
     .power-content {
         height: 50px;
-        width:98%;
+        width:100%;
         background-color: hotpink;
     }
     .monster {
