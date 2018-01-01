@@ -130,15 +130,12 @@
                     pointsArrayMonster.unshift(attackMonster);
                 }
             },*/
-           changeHealth: function() {
-               if (this.outputMe > 0 && this.outputMonster > 0) {
-                   this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                   this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                   this.hitPoints.me.unshift(this.currentAttackMe + 10);
-                   this.hitPoints.monster.unshift(this.currentAttackMonster + 10);
-                   this.outputMe = this.outputMe - this.currentAttackMonster;
-                   this.outputMonster = this.outputMonster - this.currentAttackMe;
-                   this.sign = "-"
+           changeHealth: function(player, action) {
+               if (this.player.output > 0 && this.player.output < 101) {
+                   this.player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                   this.player.hitPoints.unshift(this.currentAttack);
+                   this.player.output = this.player.output - this.player.currentAttack;
+                   this.action = "-"
                }
            },
             heal: function () {
