@@ -17,9 +17,9 @@
                 <h2>YOU</h2>
                 <div class="power-bar">
                     <div class="power-content"
-                         :style="{width: outputMe + '%'}"
+                         :style="{width: players.me.output + '%'}"
                          style="max-width: 100%;">
-                        <span>{{outputMe}}</span>
+                        <span>{{players.me.output}}</span>
                     </div>
                 </div>
             </div>
@@ -27,9 +27,9 @@
                 <h2>MONSTER</h2>
                 <div class="power-bar">
                     <div class="power-content"
-                         :style="{width: outputMonster + '%'}"
+                         :style="{width: players.monster.output + '%'}"
                           style="max-width: 100%;">
-                        <span>{{outputMonster}}</span>
+                        <span>{{players.monster.output}}</span>
                     </div>
                 </div>
             </div>
@@ -62,10 +62,10 @@
     <div class="row">
         <div class="box">
             <ul style="list-style-type: none; display:inline-block;"
-                v-for="(player, key) in hitPoints">
-                <li v-for="value in player"
+                v-for="(player, key) in players">
+                <li v-for="value in player.hitPoints"
                     :class="{monster: key==='monster', me: key==='me'}">
-                    {{ key }}: <span>{{ sign }}</span><span style="font-weight: bold; font-size: 18px;">{{ value }}</span>
+                    {{ key }}: <span>operator</span><span style="font-weight: bold; font-size: 18px;">{{ value }}</span>
                 </li>
             </ul>
         </div>
@@ -75,7 +75,10 @@
 </body>
 </html>
 <script>
-
+/*to do:
+-come up with solution for outputting winner
+-loop for displaying hits -  come up how to pass operator sign
+*/
     new Vue({
         el: '#app',
         data: {
@@ -94,7 +97,7 @@
             healMonster: 0 , //to be deleted
             players: {
                 monster: {
-                    currentAttack: 0,
+                    currentAttack: 12,
                     hitPoints: [],
                     output: 100,
                     healValue: 0
@@ -109,95 +112,88 @@
         },
         watch: {
             outputMe: function() {
-                if (this.outputMe <= 0) {
+                if (this.players.me.output <= 0) {
                     this.winner = "And the winner is... MONSTER";
                     this.showBtn = true;
                 }
             },
             outputMonster: function () {
-                if (this.outputMonster <= 0) {
+                if (this.players.monster.output <= 0) {
                     this.winner = "And the winner is... YOU";
                     this.showBtn = true;
                 }
             }
         },
         methods: {
-           /* takasobie: function (attackMe, attackMonster, pointsArrayMe, pointsArrayMonster) {
-                if (attackMe > 0 && attackMonster > 0) {
-                    attackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    attackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    pointsArrayMe.unshift(attackMe);
-                    pointsArrayMonster.unshift(attackMonster);
-                }
-            },*/
-           changeHealth: function(player, action) {
-               if (this.player.output > 0 && this.player.output < 101) {
-                   this.player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                   this.player.hitPoints.unshift(this.currentAttack);
-                   this.player.output = this.player.output - this.player.currentAttack;
-                   this.action = "-"
-               }
+           changeHealth: function(player, operator) {
+               if (player.output > 0 && player.output < 101) {
+                   player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                   player.hitPoints.unshift(player.currentAttack);
+                   player.output = eval(player.output + operator + player.currentAttack);
+                   //this.action = "-"
+                   // console.log(player.currentAttack)
+                   //  player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                   // console.log(player.currentAttack)
+                 }
+           },
+           clearHitPoints: function (player1, player2) {
+             player1.hitPoints = [];
+             player2.hitPoints = [];
            },
             heal: function () {
-                if (this.outputMe < 100 && this.outputMonster < 100) {
-                    this.healMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    this.healMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    this.hitPoints.me.unshift(this.healMe);
-                    this.hitPoints.monster.unshift(this.healMonster);
-                    this.outputMe = this.outputMe + this.healMe;
-                    //this.maxMin(this.outputMe, this.healMe)
-                    this.outputMonster = this.outputMonster + this.healMonster;
-                    this.sign = "+"
-                }
+              this.changeHealth(this.players.monster, "+")
+              this.changeHealth(this.players.me, "+")
+                // if (this.outputMe < 100 && this.outputMonster < 100) {
+                //     this.healMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                //     this.healMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                //     this.hitPoints.me.unshift(this.healMe);
+                //     this.hitPoints.monster.unshift(this.healMonster);
+                //     this.outputMe = this.outputMe + this.healMe;
+                //     //this.maxMin(this.outputMe, this.healMe)
+                //     this.outputMonster = this.outputMonster + this.healMonster;
+                //     this.sign = "+"
+                // }
             },
             attackMonster: function () {
-                if (this.outputMe > 0 && this.outputMonster > 0 ) {
-                    this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    this.hitPoints.me.unshift(this.currentAttackMe);
-                    this.hitPoints.monster.unshift(this.currentAttackMonster);
-                    //this.takasobie(this.currentAttackMe, this.currentAttackMonster, this.hitPoints.me, this.hitPoints.monster);
-                    this.outputMe = this.outputMe - this.currentAttackMonster;
-                    this.outputMonster = this.outputMonster - this.currentAttackMe;
-                    this.sign = "-";
-                  }
+              this.changeHealth(this.players.monster, "-")
+              this.changeHealth(this.players.me, "-")
+                // if (this.outputMe > 0 && this.outputMonster > 0 ) {
+                //     this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                //     this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                //     this.hitPoints.me.unshift(this.currentAttackMe);
+                //     this.hitPoints.monster.unshift(this.currentAttackMonster);
+                //     //this.takasobie(this.currentAttackMe, this.currentAttackMonster, this.hitPoints.me, this.hitPoints.monster);
+                //     this.outputMe = this.outputMe - this.currentAttackMonster;
+                //     this.outputMonster = this.outputMonster - this.currentAttackMe;
+                //     this.sign = "-";
+                //   }
             },
             specialAttackMonster: function () {
-                if (this.outputMe > 0 && this.outputMonster > 0) {
-                    this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                    this.hitPoints.me.unshift(this.currentAttackMe + 10);
-                    this.hitPoints.monster.unshift(this.currentAttackMonster + 10);
-                    this.outputMe = this.outputMe - this.currentAttackMonster;
-                    this.outputMonster = this.outputMonster - this.currentAttackMe;
-                    this.sign = "-"
-                }
+              this.changeHealth(this.players.monster, "-")
+              this.changeHealth(this.players.me, "-")
+                // if (this.outputMe > 0 && this.outputMonster > 0) {
+                //     this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                //     this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
+                //     this.hitPoints.me.unshift(this.currentAttackMe + 10);
+                //     this.hitPoints.monster.unshift(this.currentAttackMonster + 10);
+                //     this.outputMe = this.outputMe - this.currentAttackMonster;
+                //     this.outputMonster = this.outputMonster - this.currentAttackMe;
+                //     this.sign = "-"
+                // }
             },
             giveUp: function () {
                 this.showBtn = !this.showBtn;
-                this.outputMe = 0;
-                this.hitPoints.me = [];
-                this.hitPoints.monster = [];
+                this.players.me.output = 0;
+                this.clearHitPoints(this.players.me, this.players.monster);
             },
             startNewGame() {
                 this.showBtn = !this.showBtn;
-                this.outputMe = 100;
-                this.outputMonster = 100;
-                this.hitPoints.me = [];
-                this.hitPoints.monster = [];
+                this.players.me.output = 100;
+                this.players.monster.output = 100;
+                this.clearHitPoints(this.players.me, this.players.monster);
             }
         }
-           /* maxMin(val, pow) {
-                if (val>100) {
-                    val = 100
-                }
-                else if (val<0) {
-                    val = 0
-                }
-                else {
-                    val = val + pow
-                }
-            }*/
+
     })
 
 </script>
