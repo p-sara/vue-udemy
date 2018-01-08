@@ -10,7 +10,7 @@
 <div id="app">
     <div class="container">
         <div class="row">
-            <h1 style="color: dodgerblue; margin: 0 auto;">{{ winner }}</h1>
+            <h1 style="color: dodgerblue; margin: 0 auto;">{{ looser }}</h1>
         </div>
         <div class="row">
             <div class="col-6">
@@ -76,14 +76,14 @@
 </html>
 <script>
 /*to do:
--come up with solution for outputting winner
+-come up with solution for outputting looser
 */
     new Vue({
         el: '#app',
         data: {
             showBtn: true,
             sign: "",
-            winner: "",
+            looser: "",
            /* currentAttackMe: 0,//to be deleted
             currentAttackMonster: 0, //to be deleted
             hitPoints: {
@@ -98,12 +98,14 @@
             outputMonster: 0,
             players: {
                 monster: {
+                    name: 'monster',
                     currentAttack: 12,
                     hitPoints: [],
                     output: 100,
                     healValue: 0
-                },
+              },
                 me: {
+                    name: 'you',
                     currentAttack: 0,
                     hitPoints: [],
                     output: 100,
@@ -111,38 +113,50 @@
                 }
             }
         },
-        watch: {
-            outputMe: function() {
-                if (this.players.me.output <= 0) {
-                    this.winner = "And the winner is... MONSTER";
-                    this.showBtn = true;
-                }
-            },
-            outputMonster: function () {
-                if (this.players.monster.output <= 0) {
-                    this.winner = "And the winner is... YOU";
-                    this.showBtn = true;
-                }
-            }
-        },
+        // watch: {
+        //     outputMe: function() {
+        //         if (this.players.me.output <= 0) {
+        //             this.looser = "And the looser is... MONSTER";
+        //             this.showBtn = true;
+        //         }
+        //     },
+        //     outputMonster: function () {
+        //         if (this.players.monster.output <= 0) {
+        //             this.looser = "And the looser is... YOU";
+        //             this.showBtn = true;
+        //         }
+        //     }
+        // },
         methods: {
            changeHealth: function(player, operator) {
-               if (player.output > -1 && player.output < 101) {
+               if (player.output >=
+                  0 && player.output < 101) {
                    player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
                    player.hitPoints.unshift(operator + player.currentAttack);
                    player.output = eval(player.output + operator + player.currentAttack);
-                   if (player === this.players.me) {
-                       player.output === this.outputMe;
-                   }
-                   else if (player === this.players.monster) {
-                       player.output === this.outputMonster;
-                   }
+                   // if (player === this.players.me) {
+                   //     player.output === this.outputMe;
+                   // }
+                   // else if (player === this.players.monster) {
+                   //     player.output === this.outputMonster;
+                   // }
                    //this.action = "-"
                    // console.log(player.currentAttack)
                    //  player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
                    // console.log(player.currentAttack)
                  }
                  else {
+                   this.looser = "and the looser is... " + player.name
+                    // return Math.max(player.output)
+                    // for (let player in this.players) {
+                    //   let obj = this.players[player]
+                    //   for (let key in obj) {
+                    //     console.log(key)
+                    //   }
+                    // }
+
+
+                   //console.log(this.players.length)
                    this.showBtn = true;
                }
            },
