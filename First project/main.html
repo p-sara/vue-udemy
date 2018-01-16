@@ -84,22 +84,12 @@
             showBtn: true,
             sign: "",
             looser: "",
-           /* currentAttackMe: 0,//to be deleted
-            currentAttackMonster: 0, //to be deleted
-            hitPoints: {
-                me: [],//to be deleted
-                monster: [] //to be deleted
-            },
-            outputMe: 100,//to be deleted
-            outputMonster:100, //to be deleted
-            healMe: 0, //to be deleted
-            healMonster: 0 , //to be deleted*/
-            outputMe: 0,
-            outputMonster: 0,
+            // outputMe: 0,
+            // outputMonster: 0,
             players: {
                 monster: {
                     name: 'monster',
-                    currentAttack: 12,
+                    currentAttack: 0,
                     hitPoints: [],
                     output: 100,
                     healValue: 0
@@ -113,50 +103,15 @@
                 }
             }
         },
-        // watch: {
-        //     outputMe: function() {
-        //         if (this.players.me.output <= 0) {
-        //             this.looser = "And the looser is... MONSTER";
-        //             this.showBtn = true;
-        //         }
-        //     },
-        //     outputMonster: function () {
-        //         if (this.players.monster.output <= 0) {
-        //             this.looser = "And the looser is... YOU";
-        //             this.showBtn = true;
-        //         }
-        //     }
-        // },
         methods: {
            changeHealth: function(player, operator) {
-               if (player.output >=
-                  0 && player.output < 101) {
+               if (player.output >= 0 && player.output < 101) {
                    player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
                    player.hitPoints.unshift(operator + player.currentAttack);
                    player.output = eval(player.output + operator + player.currentAttack);
-                   // if (player === this.players.me) {
-                   //     player.output === this.outputMe;
-                   // }
-                   // else if (player === this.players.monster) {
-                   //     player.output === this.outputMonster;
-                   // }
-                   //this.action = "-"
-                   // console.log(player.currentAttack)
-                   //  player.currentAttack = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                   // console.log(player.currentAttack)
                  }
                  else {
                    this.looser = "and the looser is... " + player.name
-                    // return Math.max(player.output)
-                    // for (let player in this.players) {
-                    //   let obj = this.players[player]
-                    //   for (let key in obj) {
-                    //     console.log(key)
-                    //   }
-                    // }
-
-
-                   //console.log(this.players.length)
                    this.showBtn = true;
                }
            },
@@ -167,43 +122,14 @@
             heal: function () {
               this.changeHealth(this.players.monster, "+")
               this.changeHealth(this.players.me, "+")
-                // if (this.outputMe < 100 && this.outputMonster < 100) {
-                //     this.healMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                //     this.healMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                //     this.hitPoints.me.unshift(this.healMe);
-                //     this.hitPoints.monster.unshift(this.healMonster);
-                //     this.outputMe = this.outputMe + this.healMe;
-                //     //this.maxMin(this.outputMe, this.healMe)
-                //     this.outputMonster = this.outputMonster + this.healMonster;
-                //     this.sign = "+"
-                // }
             },
             attackMonster: function () {
               this.changeHealth(this.players.monster, "-")
               this.changeHealth(this.players.me, "-")
-                // if (this.outputMe > 0 && this.outputMonster > 0 ) {
-                //     this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                //     this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                //     this.hitPoints.me.unshift(this.currentAttackMe);
-                //     this.hitPoints.monster.unshift(this.currentAttackMonster);
-                //     //this.takasobie(this.currentAttackMe, this.currentAttackMonster, this.hitPoints.me, this.hitPoints.monster);
-                //     this.outputMe = this.outputMe - this.currentAttackMonster;
-                //     this.outputMonster = this.outputMonster - this.currentAttackMe;
-                //     this.sign = "-";
-                //   }
             },
             specialAttackMonster: function () {
               this.changeHealth(this.players.monster, "-")
               this.changeHealth(this.players.me, "-")
-                // if (this.outputMe > 0 && this.outputMonster > 0) {
-                //     this.currentAttackMe = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                //     this.currentAttackMonster = parseInt(Math.random() * 10) + parseInt(Math.random() * 10);
-                //     this.hitPoints.me.unshift(this.currentAttackMe + 10);
-                //     this.hitPoints.monster.unshift(this.currentAttackMonster + 10);
-                //     this.outputMe = this.outputMe - this.currentAttackMonster;
-                //     this.outputMonster = this.outputMonster - this.currentAttackMe;
-                //     this.sign = "-"
-                // }
             },
             giveUp: function () {
                 this.showBtn = !this.showBtn;
