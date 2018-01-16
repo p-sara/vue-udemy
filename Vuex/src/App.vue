@@ -10,6 +10,12 @@
                 <app-another-counter></app-another-counter>
             </div>
         </div>
+        <br>
+        <br>
+        <input type="text" :value="value" @input="updateValue">
+        <p>{{value}}</p>
+        <input type="text" v-model="modelValue">
+        <p>{{modelValue}}</p>
     </div>
 </template>
 
@@ -20,6 +26,24 @@
     import AnotherResult from './components/AnotherResult.vue';
 
     export default {
+        computed: {
+            value() {
+                return this.$store.getters.value;
+            },
+            modelValue: {
+                get() {
+                    return this.$store.getters.modelValue;
+                },
+                set(modelValue) {
+                    return this.$store.dispatch('updateModelValue', modelValue)
+                }
+            }
+        },
+        methods: {
+            updateValue(event) {
+                this.$store.dispatch('updateValue', event.target.value)
+            }
+        },
         components: {
             appCounter: Counter,
             appAnotherCounter: AnotherCounter,
